@@ -21,11 +21,50 @@
     </head>
 
     <body>
+
         <div class="container">
             <h1>Maailma parimad albumid</h1>
 
+            <form action="#" method="get">
+                Otsi: <input type="text" name="s">
+                      <input type="submit" value="Otsi">
+            </form>  <br>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  
+
             <?php
-                echo "Siia tulevad tooted!";
+
+            //otsing
+
+                if (isset($_GET["s"])) {
+                    $s = $_GET["s"];
+                    $paring ='SELECT album, hind FROM albumid WHERE album LIKE "%'.$s.'%"';
+                } else {
+            //päring mille saadan andmebaasi
+                $paring ="SELECT album, hind FROM albumid ORDER BY artist ASC LIMIT 10";
+                }
+                
+            //saadan soovitud ühndusele minu päringu
+                $valjund = mysqli_query($yhendus, $paring);
+            //sikutame andmebaasi vastuse
+                $rida = mysqli_fetch_assoc($valjund);
+            //test
+                while($rida = mysqli_fetch_assoc($valjund)){
+
+                    //print_r($rida);
+                    //echo $rida ['artist']." - ".$rida["album"]."<br>";
+                    echo '<div class="col">
+                    <div class="card">
+                      <img src="https://picsum.photos/400/400" alt="pildike">
+                      <div class="card-body">
+                        <h5 class="card-title">'.$rida['album'].'</h5>
+                        <p class="card-text">'.$rida['hind'].'€</p>
+                        <a href="#" class="btn btn-danger">Osta</a>
+                      </div>
+                    </div>
+                  </div>';
+            }
 
             ?>
 
