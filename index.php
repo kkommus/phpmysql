@@ -35,6 +35,24 @@
 
             <?php
 
+            //kustutamine
+            if(!empty($_GET["del"]) && !empty($_GET["id"])){
+                $del = $_GET["del"];
+                $id = $_GET["id"];
+
+                $paring = "DELETE FROM albumid WHERE id=$id";
+                $valjund = mysqli_query($yhendus, $paring);
+                if($valjund){
+                   // echo "Kustutamine õnnestus!";
+                    header("Location: index.php?msg=true");
+                }else{
+                   // echo "Kustutamine ebaõnnestus!";
+                    header("Location: index.php?msg=false");
+                    
+                }
+            }
+        
+
             //otsing
 
                 if (isset($_GET["s"])) {
@@ -42,7 +60,7 @@
                     $paring ='SELECT album, hind FROM albumid WHERE album LIKE "%'.$s.'%"';
                 } else {
             //päring mille saadan andmebaasi
-                $paring ="SELECT album, hind FROM albumid ORDER BY artist ASC LIMIT 10";
+                $paring ="SELECT id, album, hind FROM albumid ORDER BY artist ASC LIMIT 10";
                 }
                 
             //saadan soovitud ühndusele minu päringu
@@ -61,6 +79,7 @@
                         <h5 class="card-title">'.$rida['album'].'</h5>
                         <p class="card-text">'.$rida['hind'].'€</p>
                         <a href="#" class="btn btn-danger">Osta</a>
+                        <a href="index.php?del=kustuta&id='.$rida['id'].'" class="btn btn-warning">Kustuta</a>
                       </div>
                     </div>
                   </div>';
