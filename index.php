@@ -25,6 +25,16 @@
         <div class="container">
             <h1>Maailma parimad albumid</h1>
 
+            <h2>Uue albumi lisamine</h2>
+            <form action="" method="get">
+                Artist <input type="text" name="artist"><br>
+                Album <input type="text" name="album"><br>
+                Aasta <input type="year" name="aasta" min="1900"><br>
+                Hind <input type="number" name="hind"><br>
+                <input type="submit" value="+ Lisa uus" name="lisa">
+            </form>
+
+            <h2>Otsing</h2>
             <form action="#" method="get">
                 Otsi: <input type="text" name="s">
                       <input type="submit" value="Otsi">
@@ -35,6 +45,24 @@
 
             <?php
 
+            //lisamine
+            if(!empty($_GET["lisa"])){
+                $artist = $_GET["artist"];
+                $album = $_GET["album"];
+                $aasta = $_GET["aasta"];
+                $hind = $_GET["hind"];
+
+                $paring ="INSERT INTO albumid(artist, album, aasta, hind) VALUES ('$artist', '$album', '$aasta', '$hind')";
+                //print_r($paring);
+                $valjund =mysqli_query($yhendus, $paring);
+                if ($valjund) {
+                    echo "Lisamine õnnestus!";
+                }else{
+                    echo "Lisamine ebaõnnestus!";
+                }
+            }
+
+$paring = "SELECT * FROM albumid";
             //kustutamine
             if(!empty($_GET["del"]) && !empty($_GET["id"])){
                 $del = $_GET["del"];
@@ -58,10 +86,10 @@
                 if (isset($_GET["s"])) {
                     $s = $_GET["s"];
                     $paring ='SELECT album, hind FROM albumid WHERE album LIKE "%'.$s.'%"';
-                } else {
+                } /*else {
             //päring mille saadan andmebaasi
                 $paring ="SELECT id, album, hind FROM albumid ORDER BY artist ASC LIMIT 10";
-                }
+                }*/
                 
             //saadan soovitud ühndusele minu päringu
                 $valjund = mysqli_query($yhendus, $paring);
